@@ -120,11 +120,11 @@
             lis[Math.abs(index)].children[0].muted = false
             lis[Math.abs(index)].children[0].play()
 
-            if(!translate) {
-                span.style.display = 'none'
-                span.style.top = 0
-                window.location.reload()
-            }
+            
+            span.style.display = 'none'
+            span.style.top = 0
+            window.location.reload()
+
         })
 
         container.addEventListener('scroll',() => {
