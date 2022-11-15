@@ -18,7 +18,7 @@
         }
         .container {
             position: relative;
-            overflow: scroll;
+            overflow: hidden;
             width: 100%;
             height: 715px;
         }
@@ -43,7 +43,7 @@
             position: absolute;
             top: 0;
             left: 50%;
-            color: rgba(255,255,255,.7);
+            color: #fff;
             font-size: 1.3em;
             transform: translateX(-50%);
             z-index: 999;
@@ -77,37 +77,56 @@
     let index = 0
     let beginTime = 0
     let endTime = 0
+    let span_move = 0
+    let screenHeight = 715
+    let flag = false
 
     window.onload = () => {
+        container.style.height = screenHeight + 'px'
         container.addEventListener('touchstart',  e => {
             start = e.touches[0].pageY
-            offset = index * 715
+            offset = index * screenHeight
             content.style.transition = 'none'
             beginTime = Date.now()
         })
         container.addEventListener('touchmove',e => {
             e.preventDefault()
             move = e.touches[0].pageY - start
-            
             translate = offset + move
+
             if(translate < -1430 ) translate = -1430
             if(translate > 0) {
+                flag = true   
                 translate = 0
-                span.style.display = 'block'
-                span.style.top = Math.abs(move)>90?90:Math.abs(move) + 'px'
+                if(span.style.display === 'none') {
+                    span.style.display = 'block'
+                }
+                
+                span_move = Math.abs(move)>90?90:Math.abs(move)
+
+                if(span_move <= 60) {
+                    span.style.color = 'rgba(255,255,255,.5)'
+                } else {
+                    span.style.color = '#fff'
+                }
+                span.style.top = span_move + 'px'
+              
             }
-            content.style.top = `${translate}px`
+    
+            if(!flag) {
+                content.style.top = `${translate}px`
+            }
         })
         container.addEventListener('touchend', e => {
             content.style.transition = 'all .3s'
             
             if(move) {
                 endTime = Date.now()
-                if(Math.abs(move) > 300 || endTime - beginTime <= 200) {
+                if(Math.abs(move) > 260 || endTime - beginTime <= 200) {
                     move>0? index++ : index--
                     if(index < -2) index = -2
                     if(index > 0) index = 0
-                    content.style.top = `${index * 715}px`
+                    content.style.top = `${index * screenHeight}px`
                 } else {
                     content.style.top = `${offset}px`
                 }
@@ -120,17 +139,14 @@
             lis[Math.abs(index)].children[0].muted = false
             lis[Math.abs(index)].children[0].play()
 
-            if(!translate) {
+            
+            if(flag) {      
                 span.style.display = 'none'
                 span.style.top = 0
-                if(!span.style.offsetrTop) {
-                    window.location.reload()
-                }
-            }
-        })
-
-        container.addEventListener('scroll',() => {
-            console.log('scroll');
+                console.log(span.style.color);
+                if(span.style.color === 'rgb(255, 255, 255)') location.reload()
+                flag = false
+            }  
         })
     }
 </script>
