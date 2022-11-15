@@ -98,6 +98,7 @@
             if(translate > 0) {
                 flag = true   
                 translate = 0
+                console.log(span.style.display);
                 if(span.style.display === '' || span.style.display === 'none') {
                     span.style.display = 'block'
                 }
@@ -143,7 +144,6 @@
             if(flag) {      
                 span.style.display = 'none'
                 span.style.top = 0
-                console.log(span.style.color);
                 if(span.style.color === 'rgb(255, 255, 255)') location.reload()
                 flag = false
             }  
